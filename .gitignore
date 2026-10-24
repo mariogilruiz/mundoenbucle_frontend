@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# logos e imágenes (se sirven desde la API); se conservan las carpetas
+public/assets/**/*
+!public/assets/**/
+!public/assets/**/.gitkeep

@@ -1,26 +1,59 @@
 @import "tailwindcss";
+@import "../styles/imports.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0A0A0C;
+  --foreground: #161617;
+  --primary:#F0F1F1;
+  --primary-hover: #dbdbdb;
+  --secondary: #2997FF;
+  --secondary-hover: #1a7ed0;
+  --tertiary: #BF5AF2;
+  --tertiary-hover: #a04ed0;
+  --neutral: #232528;
+  --neutral-hover: #3b3b3b;
+  --logo-orange: #ffb05f;
+  --logo-red: #bc605d; 
+  --logo-red-hover: #a04e4b;
+  --logo-yellow: #e7cf8a;
+  --muted: #6b7280;
+  --border: #3a3a3a;
+  --border-hover: #5a5a5a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-logo: var(--font-plus-jakarta-sans);
+  --font-body: var(--font-inter);
+  --font-label: var(--font-inter);
+  --bg-background: var(--background);
+  --bg-foreground: var(--foreground);
+  --bg-muted: var(--muted);
+  --bg-primary: var(--primary);
+  --bg-primary-hover: var(--primary-hover);
+  --bg-secondary: var(--secondary);
+  --bg-secondary-hover: var(--secondary-hover);
+  --bg-tertiary: var(--tertiary);
+  --bg-tertiary-hover: var(--tertiary-hover);
+  --bg-neutral: var(--neutral);
+  --bg-neutral-hover: var(--neutral-hover);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
-  background: var(--background);
+  /* background: var(--background); */
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body, Inter), Helvetica, sans-serif;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body, Inter),Helvetica, sans-serif;
+  font-weight: 700;
 }

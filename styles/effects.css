@@ -1,0 +1,88 @@
+.button-click-effect {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: scale 120ms ease;
+}
+
+.button-click-effect:active {
+  scale: 0.98;
+}
+
+.button-ripple {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, currentColor 24%, transparent);
+  pointer-events: none;
+  transform: scale(0);
+  animation: button-ripple 600ms ease-out forwards;
+}
+
+@keyframes button-ripple {
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Panel que se despliega hacia abajo al hacer hover/focus en el padre `.group` */
+.reveal-down {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 300ms ease-in-out,
+    visibility 300ms;
+}
+
+.group:hover > .reveal-down,
+.group:focus-within > .reveal-down {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.reveal-down > * {
+  overflow: hidden;
+}
+
+/* Vistas apiladas en la misma celda de una rejilla; data-active controla cuál se ve */
+.fade-view {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    opacity 300ms ease-in-out,
+    grid-template-rows 300ms ease-in-out;
+}
+
+/* La vista inactiva colapsa su alto para que el contenedor se ajuste a la activa */
+.fade-view[data-active="false"] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fade-view > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-click-effect {
+    transition: none;
+  }
+
+  .button-click-effect:active {
+    scale: 1;
+  }
+
+  .button-ripple {
+    display: none;
+  }
+
+  .reveal-down,
+  .fade-view {
+    transition: none;
+  }
+}
