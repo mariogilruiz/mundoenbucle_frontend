@@ -1,7 +1,7 @@
 "use client";
 
+import Icon from "../icons/Icon";
 import { useState } from "react";
-import Buttons from "../buttons/Buttons";
 import HeaderLink from "./HeaderLink";
 
 export default function HeaderMobile({ datas }) {
@@ -32,23 +32,44 @@ export default function HeaderMobile({ datas }) {
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => (open ? close() : setOpen(true))}
-        className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--primary)] hover:text-[var(--primary-hover)] focus-visible:outline-2 focus-visible:outline-[var(--secondary)]"
+        className="flex h-11 w-12 items-center justify-center rounded-full text-[var(--muted)] transition-colors duration-300 hover:text-[var(--primary)] focus-visible:outline-2 focus-visible:outline-[var(--secondary)]"
       >
         <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
+          width="40"
+          height="32"
+          viewBox="0 0 40 32"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           aria-hidden="true"
         >
-          {open ? (
-            <path d="M6 6l12 12M18 6L6 18" />
-          ) : (
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          )}
+          <line
+            x1="2"
+            y1="11"
+            x2="38"
+            y2="11"
+            style={{
+              transformOrigin: "20px 11px",
+              transition: "transform 300ms ease",
+              transform: open
+                ? "translateY(5px) rotate(45deg) scaleX(0.55)"
+                : "none",
+            }}
+          />
+          <line
+            x1="2"
+            y1="21"
+            x2="38"
+            y2="21"
+            style={{
+              transformOrigin: "20px 21px",
+              transition: "transform 300ms ease",
+              transform: open
+                ? "translateY(-5px) rotate(-45deg) scaleX(0.55)"
+                : "none",
+            }}
+          />
         </svg>
       </button>
 
@@ -56,7 +77,7 @@ export default function HeaderMobile({ datas }) {
         <nav
           id="mobile-menu"
           aria-label={datas.aria?.mobileMenu}
-          className="absolute left-0 right-0 top-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-foreground px-6 pb-6 text-[var(--primary)] shadow-lg"
+          className="menu-enter absolute left-0 right-0 top-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-foreground px-6 pb-2 text-[var(--primary)] shadow-lg"
         >
           <div className="grid">
             <div className="contents">
@@ -77,19 +98,7 @@ export default function HeaderMobile({ datas }) {
                             className="flex w-full items-center justify-between py-4 text-left font-medium hover:text-[var(--primary-hover)]"
                           >
                             {item.label}
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              aria-hidden="true"
-                            >
-                              <path d="M9 6l6 6-6 6" />
-                            </svg>
+                            <Icon name="chevron-right" size={16} />
                           </button>
                         ) : (
                           <HeaderLink
@@ -117,19 +126,7 @@ export default function HeaderMobile({ datas }) {
                     onClick={() => setOpenSub(null)}
                     className="flex w-full items-center gap-2 py-4 text-left font-medium hover:text-[var(--primary-hover)]"
                   >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M15 6l-6 6 6 6" />
-                    </svg>
+                    <Icon name="chevron-left" size={18} />
                     {activeItem?.label}
                   </button>
                   <ul className="flex flex-col pb-3">
@@ -158,14 +155,6 @@ export default function HeaderMobile({ datas }) {
               </div>
             </div>
           </div>
-          <Buttons
-            type="secondary"
-            href="/contacto"
-            onClick={close}
-            className="mt-6 w-full"
-          >
-            {datas.cta}
-          </Buttons>
         </nav>
       )}
     </div>

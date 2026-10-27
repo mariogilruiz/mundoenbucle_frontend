@@ -68,7 +68,52 @@
   overflow: hidden;
 }
 
+/* Header completo y compacto se intercambian cuando el hero sale del viewport */
+.header-main,
+.header-compact {
+  transition:
+    transform 300ms ease-in-out,
+    visibility 300ms;
+}
+
+.header-compact {
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+
+html[data-hero-out] .header-main {
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+
+html[data-hero-out] .header-compact {
+  transform: none;
+  visibility: visible;
+}
+
+.menu-enter {
+  animation: menu-enter 300ms ease-out;
+}
+
+@keyframes menu-enter {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .header-main,
+  .header-compact {
+    transition: none;
+  }
+
+  .menu-enter {
+    animation: none;
+  }
+
   .button-click-effect {
     transition: none;
   }
@@ -85,4 +130,19 @@
   .fade-view {
     transition: none;
   }
+}
+
+
+.border-shape-xs {
+  border-radius: 20px;
+  corner-shape: squircle; /* o: round | scoop | bevel | notch | square | superellipse(n) */
+}
+.border-shape {
+  border-radius: 60px;
+  corner-shape: squircle; /* o: round | scoop | bevel | notch | square | superellipse(n) */
+}
+
+.border-shape-xl {
+  border-radius: 120px;
+  corner-shape: squircle; /* o: round | scoop | bevel | notch | square | superellipse(n) */
 }

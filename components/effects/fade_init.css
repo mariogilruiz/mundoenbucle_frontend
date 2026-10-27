@@ -1,0 +1,15 @@
+.fade-init {
+  opacity: 1;
+  animation: fadeInit var(--fade-duration, 500ms) var(--fade-delay, 1000ms)
+    var(--fade-easing, ease) both;
+}
+
+@keyframes fadeInit {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
