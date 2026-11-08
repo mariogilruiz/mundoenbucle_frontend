@@ -28,8 +28,8 @@ export default function ReproductorVideo({ data }) {
 
   const title = getDisplayValue(data?.title ?? data?.titleShow ?? video?.title);
   const videoTitle =
-    getDisplayValue(video.title) || title || "Reproductor de video";
-  const coverAlt = getDisplayValue(cover.alt) || title || "Portada del video";
+    getDisplayValue(video?.title) || title || "Reproductor de video";
+  const coverAlt = getDisplayValue(cover?.alt) || title || "Portada del video";
   const location = getDisplayValue(data?.location);
   const quality = getDisplayValue(data?.quality);
   const keywords = Array.isArray(data?.keywords)
@@ -50,24 +50,24 @@ export default function ReproductorVideo({ data }) {
 
   return (
     <>
-      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-[var(--border)] px-5 py-3">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-[var(--border)] bg-[var(--neutral)]/40 px-5 py-2 backdrop-blur-sm">
         <span aria-hidden="true" />
-        <span className="min-w-0 max-w-[60vw] truncate px-2 text-center font-mono text-xs text-[var(--muted)]">
+        <span className="min-w-0 max-w-[60vw] truncate px-2 text-center font-sans text-xs font-medium tracking-wide text-[var(--muted)]">
           {title ? `${title} — ` : ""}
           Reproductor
         </span>
-        <span className="justify-self-end rounded bg-[var(--primary)] px-1.5 py-0.5 font-mono text-[10px] font-bold text-[var(--background)]">
+        <span className="justify-self-end rounded-full border border-[var(--secondary)]/40 bg-[var(--secondary)]/15 px-2.5 py-0.5 text-[10px] font-semibold tracking-wider text-[var(--secondary)]">
           {quality || "4K"}
         </span>
       </div>
 
-      <div className="relative z-2 flex items-center justify-center p-2 md:p-4">
+      <div className="relative z-2 flex items-center justify-center p-2 ">
         {specs.length > 0 && (
-          <ul className="pointer-events-none absolute left-0 right-0 top-0 z-1 hidden flex-wrap gap-2 p-3 font-mono text-[11px] md:flex md:p-7">
-            {specs.map(({ label, value }) => (
+          <ul className="pointer-events-none absolute left-0 right-0 top-0 z-1 hidden flex-wrap gap-2 p-4 text-[11px] md:flex ">
+            {specs.map(({ label, value }, index) => (
               <li
-                key={label}
-                className="border-shape border-2 border-[var(--border)] bg-[var(--background)] px-3 py-1"
+                key={label ?? index}
+                className="rounded-full border border-[var(--border)]/60 bg-[var(--background)]/70 px-3 py-1 shadow-lg backdrop-blur-md"
               >
                 <span className="text-[var(--muted)]">{label}: </span>
                 {value}
@@ -87,10 +87,10 @@ export default function ReproductorVideo({ data }) {
       </div>
 
       {(location || keywords.length > 0 || specs.length > 0) && (
-        <div className=" flex-col gap-3 border-t border-[var(--border)] p-4 font-mono text-xs hidden md:flex">
+        <div className=" flex-col gap-2 border-t border-[var(--border)]/60 py-2 px-4 text-xs hidden md:flex">
           {location && (
             <p>
-              <span className="text-[var(--muted)]">Ubicación: </span>
+              <span className="text-[var(--muted)]   ">Ubicación: </span>
               {location}
             </p>
           )}
@@ -104,13 +104,13 @@ export default function ReproductorVideo({ data }) {
       )}
 
       {(technicalDetails.length > 0 || videoSrc) && (
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-[var(--border)] px-4 py-2 font-mono text-[11px] text-[var(--muted)]">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-[var(--border)]/60 px-4 py-1.5 text-[11px] text-[var(--muted)]">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#28c840] shadow-[0_0_6px_#28c840]" />
             Listo
           </span>
-          {technicalDetails.map(({ label, value }) => (
-            <span key={label}>
+          {technicalDetails.map(({ label, value }, index) => (
+            <span key={label ?? index}>
               {label}: {value}
             </span>
           ))}

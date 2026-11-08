@@ -1,0 +1,48 @@
+.fade-down {
+  --fade-mask: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 33.3%,
+    transparent 66.6%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--fade-mask);
+  mask-image: var(--fade-mask);
+  -webkit-mask-size: 100% 300%;
+  mask-size: 100% 300%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: fadeDown var(--fade-duration, 500ms) var(--fade-delay, 0ms)
+    var(--fade-easing, ease) both;
+}
+
+/* El borde difuminado de la máscara baja de arriba a abajo revelando el contenido */
+@keyframes fadeDown {
+  from {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-down {
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation-name: fadeDownReduced;
+  }
+
+  @keyframes fadeDownReduced {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}

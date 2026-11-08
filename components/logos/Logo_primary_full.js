@@ -1,6 +1,7 @@
-import { getAssetUrl } from "@/lib/project";
+// import { getAssetUrl } from "@/lib/project";
 import Image from "next/image";
 import Link from "next/link";
+import Icon from "../icons/Icon";
 
 export default function Logo_primary_full() {
   return (
@@ -9,14 +10,15 @@ export default function Logo_primary_full() {
       aria-label="Ir al inicio de Mundo en Bucle"
       className="flex items-center gap-2 font-logo text-xl font-bold text-[var(--primary)]"
     >
-      <Image
+      {/* <Image
         src={getAssetUrl("logos/logo_MundoEnBucle_SVG.svg")}
         alt="logo principal de MundoEnBucle"
         width={32}
         height={32}
         unoptimized
         className="h-8 w-auto"
-      />
+      /> */}
+      <Icon name={"primaryLogo"} className="" size={32} />
       MundoEnBucle
       {/* <Image
         src={getAssetUrl("logos/logo_MundoEnBucle_E_SVG.svg")}

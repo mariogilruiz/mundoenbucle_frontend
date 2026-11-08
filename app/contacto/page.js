@@ -4,5 +4,9 @@ export const metadata = {
 };
 
 export default function page() {
-  return <div>CONTACTO</div>;
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      CONTACTO
+    </div>
+  );
 }

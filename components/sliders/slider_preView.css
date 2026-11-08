@@ -3,6 +3,7 @@
   max-width: none;
   margin-inline: calc(50% - 50vw);
   overflow: hidden;
+  overscroll-behavior-x: none;
 }
 
 .preview-slider {
@@ -10,22 +11,72 @@
   max-width: none;
   overflow: visible;
   padding-bottom: 100px;
-  overscroll-behavior-x: none;
 }
 
-
 .preview-slider .swiper-pagination {
-  bottom: 0 !important;
+  bottom: auto !important;
+  top: calc(100% - 47px);
   left: 50%;
   width: fit-content;
   translate: -50% 0;
+  transform: translate3d(0, var(--pagination-lift, 0px), 0);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 20px;
-  border-radius: 999px;
-  background: var(--neutral);
+  gap: 10px;
+  padding: 30px;
+  border-radius: 9999px;
+  corner-shape: squircle;
+  background: rgb(from var(--neutral) r g b / 70%);
+  isolation: isolate;
+}
+
+/* El blur va en un ::before: will-change/transform en el mismo elemento
+   rompe backdrop-filter en Chrome. LightningCSS elimina la propiedad
+   estándar, así que se pasa por una variable para que llegue intacta. */
+.preview-slider .swiper-pagination::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  --pill-blur: blur(10px);
+  -webkit-backdrop-filter: var(--pill-blur);
+  backdrop-filter: var(--pill-blur);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .preview-slider .swiper-pagination[data-pagination-in-view="false"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .preview-slider .swiper-pagination[data-pagination-in-view="true"] {
+    animation: preview-pagination-bubble 650ms ease-out 500ms backwards;
+  }
+}
+
+@keyframes preview-pagination-bubble {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translate3d(0, var(--pagination-lift, 0px), 0) scale(0.6);
+  }
+
+  55% {
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0, var(--pagination-lift, 0px), 0) scale(1.08);
+  }
+
+  75% {
+    transform: translate3d(0, var(--pagination-lift, 0px), 0) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, var(--pagination-lift, 0px), 0) scale(1);
+  }
 }
 
 .preview-slider .swiper-pagination-bullet {
@@ -45,6 +96,78 @@
   border-radius: 999px;
  background: var(--bg-primary);
   opacity: 1;
+}
+
+/* Botón play/pause del autoplay, pegado a la derecha de la pill de paginación */
+.preview-slider-wrap {
+  position: relative;
+}
+
+.preview-autoplay-toggle {
+  position: absolute;
+  top: calc(100% - 50px);
+  left: calc(50% + 100px);
+  z-index: 10;
+  display: flex;
+  width: 54px;
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid rgb(255 255 255 / 12%); */
+  border-radius: 20px;
+  corner-shape: squircle(6);
+  
+  background: rgb(from var(--neutral) r g b / 70%);
+  color: var(--primary);
+  cursor: pointer;
+  --pill-blur: blur(10px);
+  -webkit-backdrop-filter: var(--pill-blur);
+  backdrop-filter: var(--pill-blur);
+  transform: translate3d(0, calc(var(--pagination-lift, 0px) + 11.5px), 0);
+  transition:
+    background-color 180ms ease;
+}
+
+.preview-autoplay-toggle:hover {
+  background: var(--neutral-hover);
+}
+
+.preview-autoplay-toggle__play {
+  margin-left: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .preview-autoplay-toggle[data-pagination-in-view="false"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .preview-autoplay-toggle[data-pagination-in-view="true"] {
+    animation: preview-autoplay-bubble 650ms ease-out 500ms backwards;
+  }
+}
+
+@keyframes preview-autoplay-bubble {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translate3d(0, calc(var(--pagination-lift, 0px) + 11.5px), 0) scale(0.6);
+  }
+
+  55% {
+    visibility: visible;
+    opacity: 1;
+    transform: translate3d(0, calc(var(--pagination-lift, 0px) + 11.5px), 0) scale(1.08);
+  }
+
+  75% {
+    transform: translate3d(0, calc(var(--pagination-lift, 0px) + 11.5px), 0) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, calc(var(--pagination-lift, 0px) + 11.5px), 0) scale(1);
+  }
 }
 
 /* .preview-arrow {
@@ -81,15 +204,165 @@
   justify-content: space-between;
   overflow: hidden;
   padding: clamp(20px, 4vw, 48px);
+  padding-bottom: 0;
+  gap: 24px;
   background: var(--neutral);
   isolation: isolate;
+}
+
+.preview-card__media {
+  position: relative;
+  display: flex;
+  align-self: center;
+  /* tamaño de los iconos */
+  width: 70%;
+  max-width: 800px;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  flex-shrink: 1;
+  gap: 16px;
+  container-type: inline-size;
+}
+
+.preview-card__logo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  pointer-events: none;
+  max-height: 450px;
+}
+
+.preview-card__logo--wide {
+  width: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 650px;
+  max-height: none !important;
+}
+
+.preview-card__icons {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(2, auto);
+  align-items: start;
+  flex-shrink: 0;
+  container-type: inline-size;
+  /* separación entre iconos */
+  gap: clamp(12px, 3cqi, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.preview-card__icons:only-child {
+  margin-block: auto;
+}
+
+.preview-card__icon-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.preview-card__icon {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  container-type: inline-size;
+  padding: 4px;
+  border: 2px  solid var(--neutral);
+  background: radial-gradient(
+    circle at 30% 25%,
+    var(--neutral-hover) 0%,
+    var(--neutral) 45%,
+    var(--background) 100%
+  );
+  color: var(--primary);
+  box-shadow:
+    0 14px 24px rgb(0 0 0 / 45%),
+    0 4px 8px rgb(0 0 0 / 35%),
+    inset 0 2px 2px rgb(255 255 255 / 22%),
+    inset 0 -6px 10px rgb(0 0 0 / 55%);
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-align: center;
+  text-shadow: 0 2px 3px rgb(0 0 0 / 60%);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.preview-card__icon:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 32px rgb(0 0 0 / 50%),
+    0 6px 12px rgb(0 0 0 / 40%),
+    inset 0 2px 2px rgb(255 255 255 / 26%),
+    inset 0 -6px 10px rgb(0 0 0 / 55%);
+}
+
+.preview-card__icon-background {
+  position: absolute;
+  inset: 15%;
+  width: 70%;
+  height: 70%;
+  color: var(--muted);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.preview-card__icon-label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  font-size: min(22px, calc(92cqi * var(--icon-text-scale)));
+}
+
+.preview-card__icon-label > span {
+  flex: 0 0 auto;
+  white-space: pre;
+}
+
+.preview-card__icon-label--lg {
+  font-size: min(28px, 55cqi);
+}
+
+.preview-card__icon-caption {
+  width: 100%;
+  color: var(--primary);
+  font-family: var(--font-inter, sans-serif);
+  font-size: clamp(10px, 1.2vw, 12px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .preview-card__shade {
   position: absolute;
   inset: 0;
   z-index: -10;
-  background: linear-gradient(to top, rgb(0 0 0 / 70%), transparent 60%);
+  background: linear-gradient(to top, rgb(0 0 0 / 100%), transparent 60%);
 }
 
 @media (max-width: 1023px) {
@@ -98,9 +371,51 @@
   }
 }
 
+@media (width < 48rem) {
+  .preview-card__icons {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .preview-card__icon-item {
+    grid-column: span 2;
+  }
+
+  .preview-card__icon-item:nth-child(1),
+  .preview-card__icon-item:nth-child(8) {
+    grid-column: 2 / span 2;
+  }
+
+  .preview-card__icon-label {
+    font-size: min(20px, calc(58cqi * var(--icon-text-scale)));
+  }
+
+  .preview-card__icon-label--lg {
+    font-size: min(24px, 44cqi);
+  }
+
+  .preview-card__icon-caption {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 400px) {
+  .preview-card__icon-caption {
+    font-size: 8px;
+  }
+}
+
 @media (max-width: 639px) {
   .preview-card {
     height: 460px;
+  }
+
+  .preview-card__media:has(.preview-card__icons) {
+    width: clamp(70%, 58vw, 85%);
+  }
+
+  .preview-card__icon {
+    padding: 0;
   }
 }
 
@@ -141,6 +456,7 @@
 
 .preview-card__bottom {
   position: relative;
+  flex-shrink: 0;
   padding-right: 45px;
 }
 
@@ -148,6 +464,9 @@
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.04em;
+}
+
+.preview-card__bottom {
   opacity: 0;
   transform: translate3d(100px, 0, 0);
   transition:
@@ -158,18 +477,62 @@
 
 
 /* Mismo efecto que AOS fade-left, disparado al pasar la card a primer plano */
-.preview-slider .swiper-slide-active .preview-card__bottom  {
+.preview-slider .swiper-slide-active .preview-card__bottom {
   opacity: 1;
   transform: none;
-  transition-delay: 300ms;
+  /* transition-delay: 1000ms; */
+}
+
+/* El h3 entra escalonado: su delay suma al del contenedor */
+.preview-card__bottom h3 {
+  opacity: 0;
+  transform: translate3d(60px, 0, 0);
+  transition:
+    opacity 500ms ease-out,
+    transform 300ms ease-out;
+}
+
+.preview-slider .swiper-slide-active .preview-card__bottom h3 {
+  opacity: 1;
+  transform: none;
+  transition-delay: 550ms;
+}
+
+/* Al ir hacia atrás (derecha a izquierda), el texto entra desde la izquierda */
+.preview-section[data-direction="prev"] .preview-card__bottom {
+  transform: translate3d(-100px, 0, 0);
+}
+
+.preview-section[data-direction="prev"] .preview-card__bottom h3 {
+  transform: translate3d(-60px, 0, 0);
+}
+
+.preview-section[data-direction="prev"]
+  .preview-slider
+  .swiper-slide-active
+  .preview-card__bottom,
+.preview-section[data-direction="prev"]
+  .preview-slider
+  .swiper-slide-active
+  .preview-card__bottom
+  h3 {
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .preview-card__bottom  {
+  .preview-card__bottom,
+  .preview-card__bottom h3 {
     opacity: 1;
     transform: none;
     transition: none;
   }
+}
+
+/* Durante el cambio de dirección, el texto oculto salta sin animar a su
+   nuevo punto de reposo para que la entrada arranque del lado correcto */
+.preview-section[data-direction-switching] .preview-card__bottom,
+.preview-section[data-direction-switching] .preview-card__bottom h3 {
+  transition: none;
 }
 
 .preview-card__bottom p {

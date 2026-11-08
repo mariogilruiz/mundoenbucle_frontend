@@ -11,7 +11,7 @@ export default function HeaderMobile({ datas }) {
 
   const inSub = openSub !== null;
   // Mantiene el contenido del submenú mientras se desliza de vuelta
-  const activeItem = lastSub === null ? null : datas.nav[lastSub];
+  const activeItem = lastSub === null ? null : (datas?.nav?.[lastSub] ?? null);
 
   const goSub = (i) => {
     setLastSub(i);
@@ -28,7 +28,7 @@ export default function HeaderMobile({ datas }) {
     <div className="lg:hidden">
       <button
         type="button"
-        aria-label={datas.aria?.openMenu}
+        aria-label={datas?.aria?.openMenu ?? "Abrir menú de navegación"}
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => (open ? close() : setOpen(true))}
@@ -76,7 +76,7 @@ export default function HeaderMobile({ datas }) {
       {open && (
         <nav
           id="mobile-menu"
-          aria-label={datas.aria?.mobileMenu}
+          aria-label={datas?.aria?.mobileMenu ?? "Menú de navegación"}
           className="menu-enter absolute left-0 right-0 top-full max-h-[calc(100vh-4rem)] overflow-y-auto bg-foreground px-6 pb-2 text-[var(--primary)] shadow-lg"
         >
           <div className="grid">
@@ -89,24 +89,24 @@ export default function HeaderMobile({ datas }) {
               >
                 <div>
                   <ul className="flex flex-col">
-                    {datas.nav.map((item, i) => (
-                      <li key={item.label}>
-                        {item.submenu ? (
+                    {(datas?.nav ?? []).map((item, i) => (
+                      <li key={item?.label ?? i}>
+                        {item?.submenu?.length > 0 ? (
                           <button
                             type="button"
                             onClick={() => goSub(i)}
                             className="flex w-full items-center justify-between py-4 text-left font-medium hover:text-[var(--primary-hover)]"
                           >
-                            {item.label}
+                            {item?.label ?? "Cargando..."}
                             <Icon name="chevron-right" size={16} />
                           </button>
                         ) : (
                           <HeaderLink
-                            href={item.href}
+                            href={item?.href ?? "#"}
                             onClick={close}
                             className="block py-4 font-medium hover:text-[var(--primary-hover)]"
                           >
-                            {item.label}
+                            {item?.label ?? "Cargando..."}
                           </HeaderLink>
                         )}
                       </li>
@@ -127,26 +127,26 @@ export default function HeaderMobile({ datas }) {
                     className="flex w-full items-center gap-2 py-4 text-left font-medium hover:text-[var(--primary-hover)]"
                   >
                     <Icon name="chevron-left" size={18} />
-                    {activeItem?.label}
+                    {activeItem?.label ?? "Cargando..."}
                   </button>
                   <ul className="flex flex-col pb-3">
                     <li>
                       <HeaderLink
-                        href={activeItem?.href}
+                        href={activeItem?.href ?? "#"}
                         onClick={close}
                         className="block py-2 text-sm font-semibold text-[var(--muted)] hover:text-[var(--primary)]"
                       >
-                        {activeItem?.label}
+                        {activeItem?.label ?? "Cargando..."}
                       </HeaderLink>
                     </li>
-                    {activeItem?.submenu.map((sub) => (
-                      <li key={sub.label}>
+                    {(activeItem?.submenu ?? []).map((sub, subIndex) => (
+                      <li key={sub?.label ?? subIndex}>
                         <HeaderLink
-                          href={sub.href}
+                          href={sub?.href ?? "#"}
                           onClick={close}
                           className="block py-2 text-sm text-[var(--muted)] hover:text-[var(--primary)]"
                         >
-                          {sub.label}
+                          {sub?.label ?? "Cargando..."}
                         </HeaderLink>
                       </li>
                     ))}

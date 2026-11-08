@@ -1,0 +1,87 @@
+.brand-intro-circle {
+  position: fixed;
+  z-index: 9999999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4rem; /* altura del header */
+  pointer-events: none;
+  animation: brand-intro-circle-fade-out 120ms ease-out 1500ms forwards;
+}
+
+.brand-intro-circle__orb {
+  --orb-size: 1.27rem; /* 63.5% del logo de 2rem */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  margin: calc(var(--orb-size) / -2) 0 0 calc(var(--orb-size) / -2);
+  border-radius: 50%;
+  animation: brand-intro-circle-converge calc(1500ms - var(--delay, 0ms))
+    cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0ms) both;
+}
+
+/* --end-dx: separación final respecto al centro del logo; --delay: escalonado */
+.brand-intro-circle__orb--red {
+  background: var(--logo-red);
+  --end-dx: -0.36rem;
+  --delay: 0ms;
+  z-index: 3;
+}
+
+.brand-intro-circle__orb--orange {
+  background: var(--logo-orange);
+  --end-dx: 0rem;
+  --delay: 120ms;
+  z-index: 2;
+}
+
+.brand-intro-circle__orb--yellow {
+  background: var(--logo-yellow);
+  --end-dx: 0.36rem;
+  --delay: 240ms;
+  z-index: 1;
+}
+
+@keyframes brand-intro-circle-converge {
+  0% {
+    opacity: 0;
+    transform: translateX(55vw) scale(20);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  /* destino: centro del logo del header (px-6, max-w-7xl, logo 32px) */
+  100% {
+    opacity: 1;
+    transform: translateX(
+        calc(max(0px, (100vw - 80rem) / 2) + 2.5rem - 50vw + var(--end-dx))
+      )
+      scale(1);
+  }
+}
+
+/* el logo del header aparece justo cuando los círculos llegan */
+body:has(.brand-intro-circle) .header-main a[aria-label^="Ir al inicio"] {
+  animation: brand-intro-circle-logo-in 1ms linear 1500ms both;
+}
+
+@keyframes brand-intro-circle-logo-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes brand-intro-circle-fade-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

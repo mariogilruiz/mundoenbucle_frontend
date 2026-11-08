@@ -32,8 +32,8 @@
 .brand-intro__orb {
   display: block;
   position: absolute;
-  width: clamp(0.75rem, 1.8vw, 1.35rem);
-  height: clamp(0.75rem, 1.8vw, 1.35rem);
+  width: clamp(1.5rem, 3.6vw, 2.7rem);
+  height: clamp(1.5rem, 3.6vw, 2.7rem);
   border-radius: 50%;
   animation: brand-intro-reveal 900ms cubic-bezier(0.22, 1, 0.36, 1) 150ms
     both;
@@ -61,7 +61,7 @@
   margin: 0;
   color: var(--primary);
   font-family: var(--font-logo), sans-serif;
-  font-size: clamp(1.25rem, 3vw, 2.8rem);
+  font-size: 2.25rem;
   font-weight: 700;
   letter-spacing: -0.06em;
   line-height: 1;
@@ -114,6 +114,18 @@
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+@media (min-width: 48rem) {
+  .brand-intro__name {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .brand-intro__name {
+    font-size: 3.75rem;
   }
 }
 
